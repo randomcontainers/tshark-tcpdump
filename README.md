@@ -58,7 +58,16 @@ gh attestation verify oci://ghcr.io/randomcontainers/tshark-tcpdump:latest \
   --repo randomcontainers/tshark-tcpdump --signer-repo randomcontainers/ci
 ```
 
-Images from `ghcr.io/randomcontainers/tshark` are built in [randomcontainers/tshark](https://github.com/randomcontainers/tshark), so verify them with `--repo randomcontainers/tshark --signer-repo randomcontainers/ci`.
+Each image also has a keyless cosign signature from the same workflow, for admission controllers that check cosign signatures:
+
+```sh
+cosign verify ghcr.io/randomcontainers/tshark-tcpdump:latest \
+  --certificate-identity https://github.com/randomcontainers/ci/.github/workflows/build.yml@refs/tags/v1 \
+  --certificate-oidc-issuer https://token.actions.githubusercontent.com \
+  --certificate-github-workflow-repository randomcontainers/tshark-tcpdump
+```
+
+Images from `ghcr.io/randomcontainers/tshark` are built in [randomcontainers/tshark](https://github.com/randomcontainers/tshark), so name that repository in `--repo` and `--certificate-github-workflow-repository`.
 
 ## Updates
 
